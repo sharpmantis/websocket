@@ -1,5 +1,7 @@
 # websocket
 
+serveur websocket nodeJS+express
+
 cd websocket
 in order to install:
 
