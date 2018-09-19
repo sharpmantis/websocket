@@ -1,3 +1,6 @@
+# Igonre la config de vsCode
+*.code-workspace
+
 # Logs
 logs
 *.log
