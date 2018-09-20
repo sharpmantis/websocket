@@ -18,15 +18,31 @@ const wss = new WebSocket.Server({ server });
 //maintenant le code!!!
 wss.on('connection', (ws: WebSocket) => {
 
+    //données transmettre aux clients (les doubles accolades annoncent que c'est un 
+    //objet vide de type JSON)
+    let envelop: any = {};
+
     //la connection est ok, on envoie un simple message
-    ws.on('message', (message: string) => {
+    ws.on('message', (message: any) => {
 
         //affiche le message dans la console et le retourne au client
-        console.log('recu: $s', message);
-        ws.send(`Hello, vous venez d'envoyer -> ${message}`);
+        console.log('recu: $s [%d]', message, new Date());
+        envelop.message = 'votre message : ' + message + ' a bien été reçu!';
+        //echo pour l'emmeteur
+        ws.send(JSON.stringify(envelop));
+
+        //broadcast vers les autres clients (sauf sois-meme)
+        wss.clients
+        .forEach(client => {
+            if (client != ws){
+                envelop.message = 'nouveau message: ' + message;
+                client.send(JSON.stringify(envelop));
+            }
+        });
     });
     //envoie immédiatement une information au client connecté
-    ws.send('salut, je suis dans le serveur WebSocket');
+    envelop.message = 'Bonjour client! Bienvenue sur le tchat!';
+    ws.send(JSON.stringify(envelop));
 
 });
 
