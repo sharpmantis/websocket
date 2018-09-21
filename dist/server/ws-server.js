@@ -18,21 +18,25 @@ wss.on('connection', (ws) => {
     let envelop = {};
     //la connection est ok, on envoie un simple message
     ws.on('message', (message) => {
+        const dialogue = JSON.parse(message);
         //affiche le message dans la console et le retourne au client
-        console.log('recu: $s [%d]', message, new Date());
-        envelop.message = 'Vous : ' + message;
+        console.log('recu: %s [%d]', message, new Date());
+        envelop.message = dialogue.message;
+        envelop.pseudo = dialogue.pseudo;
         //echo pour l'emmeteur
         ws.send(JSON.stringify(envelop));
         //broadcast vers les autres clients (sauf sois-meme)
         wss.clients
             .forEach(client => {
             if (client != ws) {
-                envelop.message = 'Utilisateur X: ' + message;
+                envelop.message = dialogue.message;
+                envelop.pseudo = dialogue.pseudo;
                 client.send(JSON.stringify(envelop));
             }
         });
     });
     //envoie immédiatement une information au client connecté
+    envelop.pseudo = 'Server';
     envelop.message = 'Bonjour, Bienvenue sur le tchat.';
     ws.send(JSON.stringify(envelop));
 });
