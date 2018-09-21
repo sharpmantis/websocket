@@ -27,7 +27,7 @@ wss.on('connection', (ws: WebSocket) => {
 
         //affiche le message dans la console et le retourne au client
         console.log('recu: $s [%d]', message, new Date());
-        envelop.message = 'votre message : ' + message + ' a bien été reçu!';
+        envelop.message = 'Vous : ' + message ;
         //echo pour l'emmeteur
         ws.send(JSON.stringify(envelop));
 
@@ -35,13 +35,13 @@ wss.on('connection', (ws: WebSocket) => {
         wss.clients
         .forEach(client => {
             if (client != ws){
-                envelop.message = 'nouveau message: ' + message;
+                envelop.message = 'Utilisateur X: ' + message;
                 client.send(JSON.stringify(envelop));
             }
         });
     });
     //envoie immédiatement une information au client connecté
-    envelop.message = 'Bonjour client! Bienvenue sur le tchat!';
+    envelop.message = 'Bonjour, Bienvenue sur le tchat.';
     ws.send(JSON.stringify(envelop));
 
 });
