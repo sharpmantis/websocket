@@ -18,3 +18,9 @@ install express and note @type
 npm i @types/ws @types/express -D
 
 you are ready to code :)
+
+A chaque changements sur le serveur, il faut le compiler:
+.node_modules/.bin/tsc
+
+Pour déparrer le serveur:
+node ./dist/server/ws-server
